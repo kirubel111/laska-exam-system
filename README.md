@@ -18,27 +18,28 @@ Hello! Welcome to my project, Laska Exam System. This is a web application I bui
 Please follow this steps to start the project in your machine:
 
 ### 1. Download the project
-'''bash
+```bash
 git clone https://github.com/kirubel111/laska-exam-system.git
 cd laska-exam-system
-'''
+```
 ### 2. Install Python things
 You need to install the packages from requirements file.
- '''bash
+ ```bash
   pip install -r requirements.txt
- '''
+ ```
 ### 3. Build Tailwind CSS
 You must have Node.js installed in your computer. Then open terminal and type this to make the CSS work:
-'''bash
+```bash
 npx tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch
-'''
+```
+[!WARNING]
 (Please keep this terminal open when you are writing code).
 
 ### 4. Start the Flask App
 Open another terminal and run the app:
-
+```python
 python app.py
-
+```
 📂 Files Inside
 app.py - The main Python backend code
 templates/ - Where the HTML files are (like quiz, dashboard)

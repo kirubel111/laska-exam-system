@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summary of exam</title>
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+</head>
+<body class="bg-gray-50 font-sans p-4 md:p-10">
+    <div class="max-w-3xl mx-auto">
+        <nav class="text-xs text-cyan-600 font-medium mb-6">
+            laska-9553 / Demo Exam / Entrance / <span class="text-gray-500">Summary of exam</span>
+        </nav>
+
+        <div class="mb-8">
+            <h2 class="text-2xl text-gray-800 italic mb-1">Entrance </h2>
+            <h1 class="text-3xl font-semibold text-gray-800">Summary of exam</h1>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-sm shadow-sm overflow-hidden">
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="border-b bg-gray-50 text-sm font-bold text-gray-700">
+                        <th class="p-4 w-1/2">Question</th>
+                        <th class="p-4">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm text-gray-700">
+                    {% for q in all_questions %}
+                    <tr class="border-b hover:bg-gray-50 transition">
+                        <td class="p-4 flex items-center gap-2">
+                            {{ loop.index }}
+                            {% if q.id in flagged_ids %}
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd" />
+                            </svg>
+                            {% endif %}
+                        </td>
+                        <td class="p-4">
+                            {% if q.id in answered_ids %}
+                                Answer saved
+                            {% else %}
+                                <span class="italic text-gray-400">Not yet answered</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-8 flex flex-col items-center gap-4">
+            <div class="text-center mt-4">
+                <p class="text-xs text-gray-500 mb-4">This exam must be submitted by Saturday, 14 February 2026, 12:00 AM</p>
+                <form action="/finish_quiz" method="POST">
+                    <button type="submit" class="bg-cyan-500 text-white px-8 py-3 rounded text-sm font-bold shadow-md hover:bg-cyan-600 transition uppercase tracking-wider">
+                        Submit all and finish
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

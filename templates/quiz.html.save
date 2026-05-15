@@ -1,0 +1,38 @@
+<script src="https://cdn.tailwindcss.com"></script>
+<body class="bg-gray-50 font-sans p-10">
+    <div class="max-w-5xl mx-auto">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Entrance Demo 001</h2>
+            <div class="bg-gray-100 border px-4 py-2 rounded text-sm font-mono">
+                Time left <span class="text-red-600">0:08:07</span>
+            </div>
+        </div>
+
+        <div class="flex gap-6">
+            <div class="w-40 bg-gray-100 p-4 border rounded h-fit text-xs text-gray-500">
+                <p class="font-bold text-gray-800">Question 5</p>
+                <p>Not yet answered</p>
+                <p class="mt-2">Marked out of 1.00</p>
+                <button class="text-teal-600 mt-4 block hover:underline">Flag question</button>
+            </div>
+
+            <div class="flex-1 bg-white border border-gray-200 rounded-lg shadow-sm">
+                <div class="bg-cyan-50 p-8 rounded-t-lg">
+                    <p class="text-lg text-gray-800 mb-6">{{ question.text }}</p>
+                    <div class="space-y-4">
+                        {% for option in question.options %}
+                        <label class="flex items-center gap-4 cursor-pointer hover:bg-white/50 p-2 rounded transition">
+                            <input type="radio" name="answer" class="w-4 h-4 text-teal-600">
+                            <span class="text-gray-700">{{ option }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="p-4 bg-gray-50 flex justify-between rounded-b-lg">
+                    <button class="bg-gray-600 text-white px-4 py-2 rounded text-sm shadow-sm" onclick="history.back()">Previous page</button>
+                    <button class="bg-teal-500 text-white px-6 py-2 rounded text-sm shadow-sm font-bold">Next page</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <title>my profile - laska Exam System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+</head>
+<body class="bg-gray-100 min-h-screen font-sans">
+    <nav class="bg-teal-600 p-4 text-white shadow-md flex justify-between items-center">
+        <h1 class="text-xl font-bold">laska Exam System</h1>
+        <div class="space-x-4">
+            <a href="/dashboard" class="hover:text-teal-200">Back To Dashboard</a>
+            <a href="/login" class="bg-red-500 px-3 py-1 rounded hover:bg-red-600">exit (Logout)</a>
+        </div>
+    </nav>
+
+    <div class="container mx-auto mt-10 p-4 max-w-3xl">
+        <div class="bg-white p-8 rounded-lg shadow-md">
+            <div class="flex items-center space-x-4 border-b pb-6 mb-6">
+                <div class="bg-teal-100 text-teal-600 w-16 h-16 rounded-full flex items-center justify-center text-3xl font-bold uppercase">
+                    {{ user[0] }}
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800">welcome back, {{ user }}</h2>
+                    <p class="text-gray-500">sudent result display</p>
+                </div>
+            </div>
+
+            <h3 class="text-xl font-bold text-gray-700 mb-4">exam history 📊</h3>
+            
+            {% if results %}
+           <div class="overflow-x-auto">
+    <table class="w-full text-left border-collapse border">
+        <thead>
+            <tr class="bg-gray-100 text-gray-600 border-b">
+                <th class="p-3 border-r">no</th>
+                <th class="p-3 border-r">exam name</th> <th class="p-3 border-r">exam date</th>
+                <th class="p-3 border-r">result</th>
+                <th class="p-3">condition</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for res in results %}
+            <tr class="border-b hover:bg-gray-50">
+                <td class="p-3 border-r">{{ loop.index }}</td>
+                <td class="p-3 font-semibold text-gray-700 border-r">{{ res.exam_title }}</td> <td class="p-3 text-sm text-gray-600 border-r">{{ res.date_taken }}</td>
+                <td class="p-3 font-bold text-teal-600 border-r">{{ res.score }} / {{ res.total }}</td>
+                <td class="p-3">
+                    {% if res.score / res.total >= 0.5 %}
+                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs">PASS</span>
+                    {% else %}
+                        <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs">FELL</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+            {% else %}
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 text-yellow-700">
+                <p>you have not taken any test yet. when you take atest, your results will be listed here.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

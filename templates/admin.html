@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel - Laska Exam System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+</head>
+<body class="bg-gray-100 font-sans">
+    <nav class="bg-slate-800 text-white p-4 flex justify-between shadow-lg">
+        <span class="font-bold text-xl">Laska Admin Panel</span>
+        <a href="/dashboard" class="text-sm bg-slate-700 px-3 py-1 rounded">View Dashboard</a>
+    </nav>
+
+    <div class="max-w-6xl mx-auto p-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <div class="lg:col-span-2 bg-white rounded-lg shadow-sm border p-6">
+            <h2 class="text-xl font-bold mb-4 text-slate-700 flex items-center gap-2">
+                📊 የተማሪዎች ውጤት ዝርዝር
+            </h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 border-b">
+                            <th class="p-3">ተማሪ</th>
+                            <th class="p-3">ውጤት</th>
+                            <th class="p-3">ቀን</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for res in results %}
+                        <tr class="border-b hover:bg-slate-50">
+                            <td class="p-3 font-medium">{{ res.username }}</td>
+                            <td class="p-3"><span class="bg-green-100 text-green-700 px-2 py-1 rounded font-bold">{{ res.score }}/{{ res.total }}</span></td>
+                            <td class="p-3 text-gray-500">{{ res.date_taken }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border p-6 h-fit">
+            <h2 class="text-xl font-bold mb-4 text-slate-700">➕ አዲስ ጥያቄ ጨምር</h2>
+            <form action="/add_question" method="POST" class="space-y-4">
+                <textarea name="text" placeholder="ጥያቄውን እዚህ ያስገቡ..." class="w-full border p-2 rounded h-24 text-sm" required></textarea>
+                <div class="space-y-2">
+                    <input type="text" name="a" placeholder="ምርጫ A" class="w-full border p-2 rounded text-sm" required>
+                    <input type="text" name="b" placeholder="ምርጫ B" class="w-full border p-2 rounded text-sm" required>
+                    <input type="text" name="c" placeholder="ምርጫ C" class="w-full border p-2 rounded text-sm" required>
+                    <input type="text" name="d" placeholder="ምርጫ D" class="w-full border p-2 rounded text-sm" required>
+                </div>
+                <label class="block text-xs font-bold text-gray-500">ትክክለኛ መልስ</label>
+                <select name="correct" class="w-full border p-2 rounded text-sm bg-gray-50">
+                    <option value="a">A</option>
+                    <option value="b">B</option>
+                    <option value="c">C</option>
+                    <option value="d">D</option>
+                </select>
+                <select name="exam_id" class="w-full border p-2 rounded text-sm bg-gray-50" required>
+                   <option value="">-- ፈተና ምረጥ --</option>
+                     {% for exam in exams %}
+                 <option value="{{ exam.id }}">{{ exam.title }}</option>
+                    {% endfor %}
+               </select>
+                <button type="submit" class="w-full bg-cyan-600 text-white font-bold py-2 rounded hover:bg-cyan-700 transition">ጥያቄውን መዝግብ</button>
+            </form>
+        </div>
+    
+    </div>
+    <div class="bg-white rounded-lg shadow-sm border p-6 mt-8">
+    <h2 class="text-xl font-bold mb-4 text-slate-700">📤 ጥያቄዎችን በ Excel (CSV) ጫን</h2>
+    <form action="/upload_csv" method="POST" enctype="multipart/form-data" class="space-y-4">
+        <input type="file" name="file" accept=".csv" class="border p-2 w-full text-sm" required>
+        <p class="text-xs text-gray-500 italic">ፋይሉ በቅደም ተከተል: ጥያቄ, A, B, C, D, መልስ መያዝ አለበት።</p>
+        <select name="exam_id" class="w-full border p-2 rounded text-sm" required>
+            <option value="">-- ፈተና ምረጥ --</option>
+            {% for exam in exams %}
+                <option value="{{ exam.id }}">{{ exam.title }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 font-bold">ፋይሉን ጫን</button>
+    </form>
+   </div>
+<div class="bg-white rounded-lg shadow-sm border p-6 mt-8">
+    <h2 class="text-xl font-bold mb-4 text-slate-700">👨‍🎓 አዲስ ተማሪ መዝግብ</h2>
+    <form action="/add_student" method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <input type="text" name="username" placeholder="የተማሪ ስም (Username)" class="border p-2 rounded text-sm" required>
+        <input type="password" name="password" placeholder="የይለፍ ቃል (Password)" class="border p-2 rounded text-sm" required>
+        <button type="submit" class="bg-slate-800 text-white font-bold py-2 rounded hover:bg-black transition">ተማሪውን ፍጠር</button>
+    </form>
+</div>
+<div class="bg-white rounded-lg shadow-sm border p-6 mt-8">
+    <h2 class="text-xl font-bold mb-4 text-slate-700">📚 አዲስ ፈተና (Course) ፍጠር</h2>
+    <form action="/add_exam" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <input type="text" name="title" placeholder="የፈተናው ስም (ለምሳሌ Physics)" class="border p-2 rounded text-sm" required>
+        <input type="text" name="category" placeholder="ምድብ (Category)" class="border p-2 rounded text-sm">
+        <input type="text" name="password" placeholder="የፈተና ሚስጥር ቃል" class="border p-2 rounded text-sm" required>
+        <button type="submit" class="bg-cyan-600 text-white font-bold py-2 rounded hover:bg-cyan-700">ፈተናውን ፍጠር</button>
+    </form>
+</div>
+<div class="bg-white rounded-lg shadow-sm border p-6 mt-">
+    <h2 class="text-xl font-bold mb-4 text-slate-700">📋 የተመዘገቡ ተማሪዎች</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+        {% for user in all_users %}
+            {% if user.role != 'admin' %}
+            <div class="bg-gray-50 p-2 rounded text-xs border flex justify-between">
+                <span>{{ user.username }}</span>
+                <span class="text-gray-400">****</span>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+<div>
+<section class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+    <h2 class="font-bold border-b pb-2 mb-6">My courses</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for exam in exams %}
+        <div class="border rounded-lg hover:shadow-md transition cursor-pointer overflow-hidden" 
+             onclick="location.href='/course/{{ exam.id }}'">
+            <div class="h-32 bg-cyan-500 flex items-center justify-center text-white text-3xl font-bold">
+                {{ exam.title[0] }} </div>
+            <div class="p-4">
+                <p class="text-teal-600 underline font-medium">{{ exam.title }}</p>
+                <p class="text-xs text-gray-400">{{ exam.category }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+</section>    
+</div>
+
+</div>
+    <div class="flex justify-between items-center mb-4">
+    <h2 class="text-xl font-bold text-slate-700 italic">📊 የተማሪዎች ውጤት ዝርዝር</h2>
+    <a href="/export_results" class="bg-green-600 text-white px-4 py-2 rounded text-xs font-bold hover:bg-green-700 transition">
+        📥 በ Excel (CSV) አውርድ
+    </a>
+</div>
+</body>
+</html>

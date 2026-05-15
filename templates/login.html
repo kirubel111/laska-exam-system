@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen font-sans">
+  
+  <div id="notification"
+       class="fixed top-6 right-6 w-[320px] bg-gray-800/80 backdrop-blur-md border border-gray-700 rounded-xl p-4 shadow-lg flex items-center justify-between gap-3
+              opacity-0 translate-y-[-20px] transition-all duration-500">
+    <div class="flex items-center gap-3">
+      <img 
+        src="{{ url_for('static', filename='image/kirubel.jpg') }}"
+        class="w-10 h-10 rounded-full object-cover"
+      >
+
+      <div>
+        <h2 class="text-white text-sm font-semibold">
+          Kirubel Nakargachew
+        </h2>
+        <p class="text-gray-400 text-xs">
+          Developer 
+          <a href="https://t.me/Qoxahkr" class="text-blue-400 underline">telegram</a>
+                  &
+         <a href="https://www.facebook.com/qoxahkr" class="text-blue-400 underline">facebook</a>
+             </p>
+        </p>
+      </div>
+    </div>
+    <button onclick="closeNotif()" class="text-gray-400 hover:text-white text-lg">
+      ✕
+    </button>
+  </div>
+
+</div>
+
+<script id="notifjs">
+  window.onload = () => {
+    const notif = document.getElementById("notification");
+    setTimeout(() => {
+      notif.classList.remove("opacity-0", "translate-y-[-20px]");
+    }, 300);
+  };
+  function closeNotif() {
+    const notif = document.getElementById("notification");
+    notif.classList.add("opacity-0", "translate-y-[-20px]");
+  }
+</script>  
+  <div class="bg-white p-10 rounded-lg shadow-sm border border-gray-200 w-96 text-center">
+        <div class="mb-8">
+            <div class="w-16 h-16 bg-teal-500 mx-auto rounded flex items-center justify-center text-white font-bold text-xl">laska</div>
+            <p class="text-xs text-gray-400 mt-2 uppercase tracking-widest">laska</p>
+        </div>
+        <form action="/login" method="POST" class="space-y-4">
+    <input type="text" name="username" placeholder="Username" class="w-full border-b p-2 outline-none focus:border-teal-500 transition" required>
+    <input type="password" name="password" placeholder="Password" class="w-full border-b p-2 outline-none focus:border-teal-500 transition" required>
+    <button type="submit" class="w-full bg-cyan-500 text-white py-2 rounded font-semibold hover:bg-cyan-600 shadow-sm">Log in</button>
+</form>
+        
+    </div>
+
+</body>
+</html>

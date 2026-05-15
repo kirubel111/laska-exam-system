@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ exam.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full text-center">
+        <h1 class="text-2xl font-bold text-teal-600 mb-4">{{ exam.title }}</h1>
+         <div class="bg-white p-8 rounded-lg border border-gray-100 shadow-sm">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="p-2 bg-red-100 rounded text-red-500">📄</span>
+                        <h2 class="text-2xl font-bold italic">General Directions</h2>
+                    </div>
+
+                    <ol class="list-decimal list-inside space-y-4 text-gray-700 leading-relaxed pl-4">
+                        <li>Each question has <strong>only one</strong> correct answer.</li>
+                        <li>The exam duration is <strong>10 minutes</strong>.</li>
+                        <li>Once you start the exam, the timer will begin.</li>
+                        <li class="text-red-600 font-medium">Do not refresh, close, or leave the exam page.</li>
+                    </ol>
+
+                </div>
+
+        <p class="text-gray-600 mb-6">This exam is part of {{ exam.category }}.</p>
+         <p class="text-xl mt-2 mb-10">my name is {{ user }} </p>
+        <form action="/start_quiz" method="POST" class="space-y-4">
+            <input type="hidden" name="exam_id" value="{{ exam.id }}">
+            <input type="password" name="quiz_password" placeholder="exam password" 
+                   class="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-teal-500" required>
+            <button type="submit" class="w-full bg-teal-600 text-white py-2 rounded font-bold hover:bg-teal-700">
+                start exam
+            </button>
+        </form>
+        <a href="/dashboard" class="block mt-4 text-sm text-gray-400 hover:underline">exit</a>
+    </div>
+</body>
+</html>

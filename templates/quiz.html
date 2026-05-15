@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrance </title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+</head>
+<body class="bg-gray-50 font-sans p-4 md:p-10">
+    <div class="max-w-5xl mx-auto">
+        <div class="flex justify-between items-center mb-6">
+           
+            <div class="bg-gray-100 border px-4 py-2 rounded text-sm font-mono shadow-sm">
+                Time left <span id="timerDisplay" class="text-red-600 font-bold">0:00:00</span>
+            </div>
+        </div>
+
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+            <span class="p-1 bg-red-100 rounded text-red-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="浸9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                </svg>
+            </span>
+            Entrance exam
+        </h2>
+
+        <div class="flex flex-col md:flex-row gap-6">
+            <div class="w-full md:w-44 bg-gray-100 p-4 border rounded h-fit text-xs text-gray-500">
+                <p class="font-bold text-gray-800 text-sm">Question {{ question.id }}</p>
+                <p class="mt-1">Not yet answered</p>
+                <p class="mt-2">Marked out of 1.00</p>
+                <button type="button" id="flag-btn-{{ question.id }}" onclick="toggleFlag({{ question.id }})" class="bg-gray-100 text-gray-700 px-4 py-2 rounded font-bold hover:bg-yellow-400 transition-colors">
+                🚩Flag question
+               </button>
+            </div>
+            
+
+            <div class="flex-1">
+                <form id="quizForm" action="/quiz/{{ question.id }}" method="POST" class="bg-white border border-gray-200 rounded-lg shadow-sm">
+                    <div class="bg-cyan-50 p-6 md:p-8 rounded-t-lg">
+                        <p class="text-lg text-gray-800 mb-6 leading-relaxed">{{ question.text }}</p>
+                        
+                        <div class="space-y-3">
+                            {% for key, val in [('a', question.option_a), ('b', question.option_b), ('c', question.option_c), ('d', question.option_d)] %}
+                            <label class="flex items-center gap-4 cursor-pointer hover:bg-white/60 p-3 rounded-md transition border border-transparent hover:border-cyan-200">
+                                <input type="radio" name="answer" value="{{ key }}" class="w-4 h-4 text-teal-600 focus:ring-teal-500" required>
+                                <span class="text-gray-700"><span class="font-medium">{{ key }}.</span> {{ val }}</span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="p-4 bg-gray-50 flex justify-between rounded-b-lg border-t">
+                        <button type="button" onclick="goToPreviousFlagged()" class="border border-teal-600 text-teal-600 px-6 py-2 rounded font-bold hover:bg-teal-50"> Previous page </button>
+                        <form action="/finish_quiz" method="POST" id="quiz-form">
+                          <input type="hidden" name="flagged_list" id="flagged_list">
+    
+                          <button type="submit" class="bg-teal-600 text-white px-6 py-2 rounded font-bold"> Next page</button>
+                       </form>
+
+<script>
+    document.getElementById('quiz-form').onsubmit = function() {
+        const flagged = localStorage.getItem('flagged_questions') || '[]';
+        document.getElementById('flagged_list').value = flagged;
+    };
+</script>
+                    </div>
+                </form>
+                
+<div class="grid grid-cols-5 gap-2" id="nav-grid">
+    {% for id in shuffled_ids %}
+    <span 
+       id="nav-btn-{{ id }}"
+       data-id="{{ id }}"
+       class="p-2 text-center rounded border nav-item transition-all duration-200
+       {% if id == question.id %}
+           bg-teal-600 text-white font-bold ring-2 ring-teal-300
+       {% else %}
+           bg-gray-50 text-gray-500
+       {% endif %}">
+        {{ loop.index }}
+    </span>
+    {% endfor %}
+</div>
+                    <a href="/summary" class="text-xs text-cyan-600 mt-4 block font-medium hover:underline hover:text-cyan-800">Finish exam...</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    let timeLeft = {{ time_left|default(600) }};
+    const timerDisplay = document.getElementById('timerDisplay');
+    const quizForm = document.getElementById('quizForm');
+    function updateTimer() {
+        if (timeLeft <= 0) {
+            timerDisplay.innerHTML = "0:00:00";
+            quizForm.submit();
+            return;
+        }
+        let hrs = Math.floor(timeLeft / 3600);
+        let mins = Math.floor((timeLeft % 3600) / 60);
+        let secs = timeLeft % 60;
+        let display = `${hrs}:${mins < 10 ? '0' + mins : mins}:${secs < 10 ? '0' + secs : secs}`;
+        timerDisplay.innerHTML = display;
+        
+        timeLeft--;
+    
+    }
+    setInterval(updateTimer, 1000);
+    updateTimer();
+    const answeredIds = {{ answered_ids | tojson | safe }};
+    const currentQid = {{ question.id }};
+
+    function toggleFlag(qId) {
+        let flagged = JSON.parse(localStorage.getItem('flagged_questions') || '[]');
+        const btn = document.getElementById('flag-btn-' + qId);
+        
+        if (flagged.includes(qId)) {
+            flagged = flagged.filter(id => id !== qId);
+            btn.classList.remove('bg-yellow-500', 'text-white');
+            btn.classList.add('bg-gray-100');
+        } else {
+            flagged.push(qId);
+            btn.classList.add('bg-yellow-500', 'text-white');
+            btn.classList.remove('bg-gray-100');
+        }
+        localStorage.setItem('flagged_questions', JSON.stringify(flagged));
+        updateNavColors();
+    }
+
+    function updateNavColors() {
+    let flagged = JSON.parse(localStorage.getItem('flagged_questions') || '[]');
+    const navItems = document.querySelectorAll('.nav-item');
+
+    navItems.forEach(item => {
+        let qId = parseInt(item.getAttribute('data-id'));
+
+        if (flagged.includes(qId)) {
+            item.classList.add('border-2', 'border-yellow-500', 'bg-yellow-50');
+            if (!item.innerHTML.includes('🚩')) {
+                item.innerHTML += ' <span class="text-[10px]">🚩</span>';
+            }
+        } else {
+            item.classList.remove('border-2', 'border-yellow-500', 'bg-yellow-50');
+            item.innerHTML = item.innerHTML.replace(' <span class="text-[10px]">🚩</span>', '');
+        }
+    });
+}
+    window.onload = updateNavColors;
+ function goToPreviousFlagged() {
+    let flagged = JSON.parse(localStorage.getItem('flagged_questions') || '[]');
+
+    const shuffledIds = {{ shuffled_ids | tojson | safe }};
+    
+    const currentIndex = shuffledIds.indexOf({{ question.id }});
+    
+    let targetId = null;
+    for (let i = currentIndex - 1; i >= 0; i--) {
+        if (flagged.includes(shuffledIds[i])) {
+            targetId = shuffledIds[i];
+            break; 
+        }
+    }
+
+    if (targetId) {
+        window.location.href = "/quiz/" + targetId;
+    } else {
+        alert("not flag before!");
+    }
+}
+</script>
+</body>
+</html>

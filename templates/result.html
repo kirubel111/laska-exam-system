@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <title>test result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+</head>
+<body class="bg-gray-100 h-screen flex items-center justify-center font-sans">
+    <div class="bg-white p-10 rounded-lg shadow-lg text-center max-w-md w-full">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">You have finished the exam! 🎉</h1>
+        
+        <p class="text-gray-600 mb-6">your result፡</p>
+        
+        <div class="text-6xl font-extrabold {% if score / total >= 0.5 %}text-green-500{% else %}text-red-500{% endif %} mb-8">
+            {{ score }} / {{ total }}
+        </div>
+        
+        <div class="space-y-4">
+            <a href="/profile" class="block w-full bg-teal-600 text-white py-2 rounded font-bold hover:bg-teal-700 transition">
+                👤 Back to profile
+            </a>
+            <a href="/dashboard" class="block w-full bg-gray-200 text-gray-800 py-2 rounded font-bold hover:bg-gray-300 transition">
+                🏠 Back to dashboard
+            </a>
+        </div>
+    </div>
+
+    <script>
+        localStorage.removeItem('flagged_questions');
+    </script>
+</body>
+</html>

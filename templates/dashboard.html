@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+</head>
+<body class="bg-gray-50 font-sans">
+   <nav class="bg-teal-600 p-4 text-white shadow-md flex justify-between items-center">
+    <h1 class="text-xl font-bold">laska Exam System</h1>
+    <div class="space-x-4 flex items-center">
+        <span class="font-medium">hello, {{ user }}!</span>
+        <a href="/profile" class="bg-teal-500 px-3 py-1 rounded hover:bg-teal-700">👤 profile</a>
+        <a href="/login" class="bg-red-500 px-3 py-1 rounded hover:bg-red-600">exit</a>
+    </div>
+   </nav>
+    <main class="max-w-6xl mx-auto p-10">
+        <h1 class="text-3xl font-light text-gray-800">Dashboard</h1>
+        <p class="text-xl mt-2 mb-10">Hi, {{ user }}! 👋</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="md:col-span-2 space-y-8">
+
+                <section class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+    <h2 class="font-bold border-b pb-2 mb-6">My courses</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for exam in exams %}
+        <div class="border rounded-lg hover:shadow-md transition cursor-pointer overflow-hidden" 
+             onclick="location.href='/course/{{ exam.id }}'">
+            <div class="h-32 bg-cyan-500 flex items-center justify-center text-white text-3xl font-bold">
+                {{ exam.title[0] }} </div>
+            <div class="p-4">
+                <p class="text-teal-600 underline font-medium">{{ exam.title }}</p>
+                <p class="text-xs text-gray-400">{{ exam.category }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>    
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm h-fit">
+                <h2 class="font-bold border-b pb-2 mb-4">Calendar</h2>
+                <p class="text-center font-bold text-gray-700 mb-4">February 2026</p>
+                <div class="grid grid-cols-7 text-center text-xs gap-y-4 text-gray-500">
+                    <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span class="text-teal-500">Sun</span>
+                    <span class="col-start-7">1</span> 
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        function openModal() { 
+            document.getElementById('passwordModal').classList.remove('hidden'); 
+        }
+        function closeModal() { 
+            document.getElementById('passwordModal').classList.add('hidden'); 
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('passwordModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+
+</body>
+</html>

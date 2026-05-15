@@ -1,0 +1,16 @@
+{
+  "name": "laska_project",
+  "version": "1.0.0",
+  "description": "ይህ ሲስተም መምህር (Admins) ፈተናዎችውን እና ጥያቄዎችውን በቀላሉ እንዲያስተዳድሩት፣ ተማሪዎች ደግሞ በድረ-ገጽ ፈተናዎችን እንዲወስዱ የተሰራ የትምህርት ድጋፍ መተግበሪያ ነው። ## 🚀 ዋና ዋና ተግባራት (Features)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
+  }
+}

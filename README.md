@@ -32,7 +32,7 @@ You must have Node.js installed in your computer. Then open terminal and type th
 ```bash
 npx tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch
 ```
-> [!WARNING]
+> [!NOTE]
 > (Please keep this terminal open when you are writing code).
 
 ### 4. Start the Flask App
